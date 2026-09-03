@@ -1,0 +1,11 @@
+name: provider-unavailable
+description: Provider rejects the request synchronously as if the upstream service were down.
+
+match:
+  phone: "254700000007"
+
+behavior:
+  initialStatus: FAILED
+  finalStatus: FAILED
+  reason: PROVIDER_UNAVAILABLE
+  httpStatus: 503

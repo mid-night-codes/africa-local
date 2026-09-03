@@ -20,8 +20,8 @@ providers:
   - id: ke-mpesa
     country: KE
     category: mobile-money
-    status: planned
-    path: null
+    status: experimental
+    path: providers/kenya/mpesa
 
   - id: ug-mtn-momo
     country: UG

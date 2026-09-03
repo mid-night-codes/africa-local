@@ -1,0 +1,11 @@
+name: timeout
+description: Customer never responds to the payment prompt; the request expires.
+
+match:
+  phone: "254700000004"
+
+behavior:
+  initialStatus: PENDING
+  finalStatus: EXPIRED
+  reason: TIMEOUT
+  callbackDelay: 5s

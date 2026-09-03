@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "M-Pesa Kenya - Initiate Payment Request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["phone", "amount"],
+  "properties": {
+    "phone": {
+      "type": "string",
+      "description": "MSISDN in 2547XXXXXXXX format. See specs/service-contract.md for deterministic test identities.",
+      "pattern": "^254[0-9]{9}$"
+    },
+    "amount": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "Amount in TZS."
+    },
+    "reference": {
+      "type": "string",
+      "description": "Caller-supplied reference echoed back in status queries and callbacks."
+    },
+    "callbackUrl": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL the emulator will POST the callback to once the payment resolves."
+    }
+  }
+}

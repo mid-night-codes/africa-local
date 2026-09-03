@@ -25,6 +25,10 @@
 - TZ Airtel Money (`tz-airtel-money`, experimental)
 - Conformance suite (`conformance/`)
 - curl example (`examples/curl/`)
+- KE M-Pesa (`ke-mpesa`, experimental) was added ahead of schedule, purely through
+  `providers/_template/` with no runtime changes, as a deliberate proof that the plugin model
+  generalizes to a new country - see `providers/kenya/mpesa/README.md`. The rest of Phase 5's
+  country expansion remains future work.
 
 ## Phase 3 - Developer tooling (in progress)
 
@@ -49,7 +53,8 @@ runtime logic). Planned screens:
 
 ## Phase 5 - Community expansion
 
-- More countries: Kenya, Uganda, Ghana, Nigeria, Rwanda
+- More countries: Uganda, Ghana, Nigeria, Rwanda (Kenya's first provider, `ke-mpesa`, is already
+  done - see Phase 2)
 - More mobile-money providers within already-supported countries
 - New service categories: SMS, USSD, identity, banking (see `services/` for placeholders)
 

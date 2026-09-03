@@ -3,6 +3,20 @@
 All notable changes to this project are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); versioning rules are in [VERSIONING.md](VERSIONING.md).
 
+## [Unreleased]
+
+### Added
+
+- KE M-Pesa (`ke-mpesa`, experimental), built entirely through `providers/_template/` with no
+  runtime changes - a deliberate test that the plugin model generalizes to a new country. See
+  `providers/kenya/mpesa/README.md`.
+
+### Changed
+
+- `specs/service-contract.md#deterministic-test-identities` generalized the deterministic phone
+  convention to be explicit about per-country prefixes (`700000001`-`700000007` suffix block) now
+  that a second country exists.
+
 ## [0.1.0] - 2026-09-03
 
 ### Added

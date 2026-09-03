@@ -1,0 +1,41 @@
+id: ke-mpesa
+name: M-Pesa Kenya
+country: KE
+category: mobile-money
+version: 0.1.0
+status: experimental
+description: >
+  Local emulator for Safaricom M-Pesa Kenya's customer-initiated payment (STK-push-style) flow.
+  Not affiliated with or endorsed by Safaricom/M-Pesa. No real money movement, no real credentials.
+
+capabilities:
+  paymentInitiation: true
+  statusQuery: true
+  callbacks: true
+  reversal: false
+  refund: false
+
+runtime:
+  protocol: http
+
+endpoints:
+  basePath: /ke/mpesa
+
+scenarios:
+  - success
+  - insufficient-funds
+  - timeout
+  - user-cancelled
+  - delayed-success
+  - duplicate-callback
+  - missing-callback
+  - provider-unavailable
+
+maintainers:
+  - "@africa-local/core-maintainers"
+
+approximations:
+  - "Response field names (transactionId/status/responseCode/responseMessage) are an Africa Local convention, not Safaricom's real Daraja API field names (which use MerchantRequestID/ResultCode/ResultDesc), since this provider was built without consulting the real Daraja integration guide in this session."
+  - "Response/error codes in mappings/*.yaml are illustrative placeholders shared with tz-mpesa's numbering, not verified against a real Safaricom M-Pesa integration. Corrections from anyone with real Daraja API experience are welcome via PR."
+  - "Reuses the same deterministic phone-number-to-scenario convention as tz-mpesa, with Kenya's 254 MSISDN prefix in place of Tanzania's 255 - see specs/service-contract.md#deterministic-test-identities."
+  - "Reversal/refund are declared unsupported in v0.1; the canonical state machine models them, but this provider does not expose endpoints for them yet."

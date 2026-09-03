@@ -60,7 +60,7 @@ npm start
 |---|---|---|---|
 | [M-Pesa](providers/tanzania/mpesa/) (`tz-mpesa`) | TZ | mobile-money | experimental |
 | [Airtel Money](providers/tanzania/airtel-money/) (`tz-airtel-money`) | TZ | mobile-money | experimental |
-| M-Pesa (`ke-mpesa`) | KE | mobile-money | planned |
+| [M-Pesa](providers/kenya/mpesa/) (`ke-mpesa`) | KE | mobile-money | experimental |
 | MTN MoMo (`ug-mtn-momo`) | UG | mobile-money | planned |
 
 See [`core/registry/registry.yaml`](core/registry/registry.yaml) for the machine-readable list.
@@ -130,7 +130,7 @@ Human contributors: see [CONTRIBUTING.md](CONTRIBUTING.md). AI coding agents: re
 
 ## Known limitations
 
-- Two providers, one country, one service category. Everything else in
+- Three providers, two countries, one service category (mobile-money). Everything else in
   [`services/`](services/) is a placeholder for Phase 5 (see [ROADMAP.md](ROADMAP.md)).
 - State is entirely in-memory and is lost on restart - there is no database and none is planned
   for v0.1.

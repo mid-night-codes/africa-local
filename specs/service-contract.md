@@ -56,20 +56,23 @@ provider request  -> canonical request  -> scenario behavior -> canonical result
 ## Deterministic test identities
 
 Providers should express deterministic behavior through `match.phone` in scenario files rather
-than hardcoding phone numbers in runtime or provider code. The Tanzania providers ship with this
-convention (see `providers/tanzania/mpesa/scenarios/`):
+than hardcoding phone numbers in runtime or provider code. The convention is the country's real
+MSISDN prefix followed by the same `700000001`-`700000007` suffix block, so the *last digit*
+carries the meaning consistently across every country's providers:
 
-| MSISDN | Scenario |
-|---|---|
-| 255700000001 | success |
-| 255700000002 | insufficient-funds |
-| 255700000003 | user-cancelled |
-| 255700000004 | timeout |
-| 255700000005 | delayed-success |
-| 255700000006 | duplicate-callback |
-| 255700000007 | provider-unavailable |
+| Suffix | Scenario | TZ (255) | KE (254) |
+|---|---|---|---|
+| `700000001` | success | 255700000001 | 254700000001 |
+| `700000002` | insufficient-funds | 255700000002 | 254700000002 |
+| `700000003` | user-cancelled | 255700000003 | 254700000003 |
+| `700000004` | timeout | 255700000004 | 254700000004 |
+| `700000005` | delayed-success | 255700000005 | 254700000005 |
+| `700000006` | duplicate-callback | 255700000006 | 254700000006 |
+| `700000007` | provider-unavailable | 255700000007 | 254700000007 |
 
-Any other phone number falls back to the `success` scenario so the golden path always works.
+Any other phone number falls back to the `success` scenario so the golden path always works. A new
+provider should reuse this suffix convention with its own country's prefix rather than inventing a
+new numbering scheme - see `providers/_template/scenarios/` for the ready-to-copy files.
 
 ## Conformance requirements
 

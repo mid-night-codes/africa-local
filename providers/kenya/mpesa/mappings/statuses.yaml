@@ -1,0 +1,33 @@
+# Maps every canonical payment status (specs/state-machines/payment-lifecycle.json) to this
+# provider's response shape. A scenario's `reason` (see mappings/errors.yaml) always overrides the
+# generic FAILED mapping below when present.
+CREATED:
+  responseCode: "0"
+  responseMessage: "Request received"
+PENDING:
+  responseCode: "0"
+  responseMessage: "Request accepted for processing"
+SUCCESS:
+  responseCode: "0"
+  responseMessage: "Success. Transaction completed."
+FAILED:
+  responseCode: "1"
+  responseMessage: "Transaction failed"
+CANCELLED:
+  responseCode: "17"
+  responseMessage: "Request cancelled by user"
+EXPIRED:
+  responseCode: "26"
+  responseMessage: "Request timed out"
+REVERSAL_PENDING:
+  responseCode: "0"
+  responseMessage: "Reversal in progress"
+REVERSED:
+  responseCode: "0"
+  responseMessage: "Transaction reversed"
+REFUND_PENDING:
+  responseCode: "0"
+  responseMessage: "Refund in progress"
+REFUNDED:
+  responseCode: "0"
+  responseMessage: "Transaction refunded"

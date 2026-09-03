@@ -1,0 +1,11 @@
+name: insufficient-funds
+description: Customer's wallet balance is too low to cover the requested amount.
+
+match:
+  phone: "254700000002"
+
+behavior:
+  initialStatus: PENDING
+  finalStatus: FAILED
+  reason: INSUFFICIENT_FUNDS
+  callbackDelay: 1s
