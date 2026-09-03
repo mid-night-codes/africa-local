@@ -1,0 +1,27 @@
+name: Commit messages
+
+# Safety net for the .husky/commit-msg hook (§29, CONTRIBUTING.md#commit-messages): re-validates
+# every commit in a PR's range against the exact same two rules - Conventional Commits format
+# (commitlint) and a required GitHub issue reference (scripts/require-issue-reference.js) - so a
+# commit made without the hook installed (e.g. via the GitHub web UI, or with --no-verify) can't
+# slip past. This workflow only validates; it never creates an issue - see
+# adr/0003-commit-message-and-issue-traceability.md for why.
+on:
+  pull_request:
+
+jobs:
+  lint-commit-messages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+      - run: npm ci
+      - name: Conventional Commit format
+        run: npx commitlint --from "${{ github.event.pull_request.base.sha }}" --to "${{ github.event.pull_request.head.sha }}" --verbose
+      - name: Require a GitHub issue reference on every commit
+        run: node scripts/require-issue-reference.js --range "${{ github.event.pull_request.base.sha }}" "${{ github.event.pull_request.head.sha }}"

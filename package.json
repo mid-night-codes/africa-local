@@ -13,6 +13,8 @@
   },
   "scripts": {
     "setup": "npm install",
+    "prepare": "husky",
+    "check-commits": "node scripts/require-issue-reference.js",
     "start": "node runtime/index.js",
     "validate:schemas": "node scripts/validate-schemas.js",
     "validate:providers": "node scripts/validate-providers.js",
@@ -20,8 +22,8 @@
     "validate": "npm run validate:schemas && npm run validate:providers && npm run validate:registry",
     "check-contracts": "node scripts/validate-contracts.js",
     "lint": "node scripts/lint-repo.js",
-    "test": "bash -c 'shopt -s globstar nullglob; node --test core/**/*.test.js runtime/**/*.test.js cli/**/*.test.js'",
-    "test:conformance": "bash -c 'shopt -s globstar nullglob; node --test conformance/**/*.test.js'"
+    "test": "node --test $(find core runtime cli scripts -name '*.test.js')",
+    "test:conformance": "node --test $(find conformance -name '*.test.js')"
   },
   "dependencies": {
     "ajv": "^8.17.1",
@@ -29,5 +31,10 @@
     "commander": "^12.1.0",
     "express": "^4.21.2",
     "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^21.2.2",
+    "@commitlint/config-conventional": "^21.2.2",
+    "husky": "^9.1.7"
   }
 }

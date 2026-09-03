@@ -46,6 +46,11 @@ make validate
 make test
 ```
 
+`make setup` (`npm install`) also installs a local git `commit-msg` hook via
+[Husky](https://typicode.github.io/husky/) that enforces the two rules in
+[Commit messages](#commit-messages) below before a commit is even created. Nothing about it
+touches the network or GitHub - see [`adr/0003-commit-message-and-issue-traceability.md`](adr/0003-commit-message-and-issue-traceability.md).
+
 ## Before opening a PR
 
 ```bash
@@ -58,15 +63,35 @@ make check-contracts    # OpenAPI/AsyncAPI sanity checks
 
 ## Commit messages
 
-[Conventional Commits](https://www.conventionalcommits.org/):
+Two rules apply to every commit, enforced locally by the Husky hook installed via `make setup` and
+again in CI ([`.github/workflows/commit-messages.yml`](.github/workflows/commit-messages.yml)) as
+a safety net - see [`adr/0003-commit-message-and-issue-traceability.md`](adr/0003-commit-message-and-issue-traceability.md)
+for why.
 
-```text
-feat(provider): add tz-airtel timeout scenario
-fix(runtime): prevent duplicate callback scheduling
-docs(provider): document mpesa status mappings
-test(conformance): validate callback schemas
-chore(ci): add schema validation
-```
+1. **[Conventional Commits](https://www.conventionalcommits.org/)** format, checked by
+   [commitlint](https://commitlint.js.org/):
+
+   ```text
+   feat(provider): add tz-airtel timeout scenario
+   fix(runtime): prevent duplicate callback scheduling
+   docs(provider): document mpesa status mappings
+   test(conformance): validate callback schemas
+   chore(ci): add schema validation
+   ```
+
+2. **Reference a GitHub issue** somewhere in the message (header, body, or a trailer), checked by
+   [`scripts/require-issue-reference.js`](scripts/require-issue-reference.js):
+
+   ```text
+   feat(provider): add ke-mpesa timeout scenario
+
+   Refs: #123
+   ```
+
+   If no issue exists yet for your change, create one first (`gh issue create` or the GitHub UI)
+   and reference it - **neither the hook nor CI creates one for you.** Merge commits are exempt.
+   For the rare, legitimate exception, `SKIP_ISSUE_CHECK=1 git commit ...` bypasses the check
+   locally; use it sparingly, since it will be visible in review.
 
 ## Pull requests
 

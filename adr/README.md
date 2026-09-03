@@ -24,3 +24,4 @@ is how you propose one that needs discussion first.
 |---|---|---|
 | [0001](0001-record-architecture-decisions.md) | Record architecture decisions | Accepted |
 | [0002](0002-runtime-language-and-no-build-step.md) | Runtime language: Node.js, plain ESM, no build step | Accepted |
+| [0003](0003-commit-message-and-issue-traceability.md) | Commit message format and issue traceability | Accepted |

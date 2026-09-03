@@ -4,7 +4,8 @@
 
 ## Why?
 
-<!-- Link the issue, or explain the motivation if there isn't one. -->
+<!-- Link the issue this PR is for (every commit should already reference it, see
+     CONTRIBUTING.md#commit-messages - if none exists yet, open one before this PR). -->
 
 ## Type of change
 
@@ -25,6 +26,8 @@
 - [ ] `core/registry/registry.yaml` updated (if a provider's status or existence changed)
 - [ ] No secrets, real credentials, or real customer data added
 - [ ] No unrelated changes included
+- [ ] Every commit follows Conventional Commits and references a GitHub issue (checked by CI, see
+      `.github/workflows/commit-messages.yml`)
 
 ## Approximations or assumptions made
 

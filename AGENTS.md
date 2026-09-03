@@ -72,6 +72,14 @@ and each provider's own `README.md` each cover only their own directory.
     service category, or another item listed in `rfcs/README.md#when-an-rfc-is-required`, open an
     RFC instead of a PR. If it's a smaller but still architecturally significant decision, record
     it as an ADR (`adr/0000-template.md`).
+16. If you create a commit, it must follow Conventional Commits and reference a GitHub issue
+    (e.g. a `Refs: #123` trailer) - see `CONTRIBUTING.md#commit-messages` and
+    `adr/0003-commit-message-and-issue-traceability.md`. This is enforced by a local git hook and
+    again in CI. If no relevant issue exists, reference an existing related one if there
+    genuinely is a fit, or ask a maintainer/the user to open one - do not fabricate an issue number
+    and do not attempt to script around the check (e.g. `SKIP_ISSUE_CHECK=1`) to make a commit
+    succeed; that flag is for a human maintainer's deliberate, visible exception, not a way to
+    satisfy a check you'd rather not deal with.
 
 ## Project-specific things worth knowing
 
@@ -82,10 +90,17 @@ and each provider's own `README.md` each cover only their own directory.
   language/provider coupling `ARCHITECTURE.md` forbids.
 - Deterministic phone numbers (e.g. `255700000001` -> success) live in `scenarios/*.yaml`
   `match.phone` fields, never hardcoded in `runtime/` or in provider JavaScript.
-- `npm --test` directory args have a discovery quirk on this Node version when a directory
-  contains nested subdirectories - the npm scripts use explicit glob patterns
-  (`core/**/*.test.js`) via `bash -c '...'` to work around it. Don't "simplify" this back to a bare
-  directory argument without checking `npm test` still passes.
+- `node --test <dir>` has a discovery quirk on this Node version: passing a bare directory that
+  itself contains nested subdirectories (e.g. `node --test core`) fails outright, while a leaf
+  directory or explicit file list works fine. The npm scripts avoid the whole problem by using
+  `find` + command substitution (`node --test $(find core runtime cli scripts -name '*.test.js')`)
+  to pass explicit file paths - this also avoids relying on bash's `globstar` glob option, which
+  **macOS's shipped `/bin/bash` (3.2) does not support at all**, silently degrading a
+  `shopt -s globstar` + `**` pattern to a non-recursive, 2-levels-deep-only match. That exact
+  silent failure happened once already in this repo (a test file placed directly in `scripts/`
+  wasn't being run, with no error - `npm test` just quietly reported fewer passing tests). Don't
+  reintroduce a `bash -c '...glob...'`-style test script without verifying it actually finds every
+  `*.test.js` file, at every depth, on macOS's real `/bin/bash`.
 
 ## Self-review checklist before opening a PR
 

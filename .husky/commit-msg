@@ -1,0 +1,1 @@
+npx --no -- commitlint --edit "$1" && node scripts/require-issue-reference.js "$1"

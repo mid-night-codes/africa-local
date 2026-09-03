@@ -63,6 +63,10 @@ Before proposing a PR, confirm all of the following:
 - [ ] If this is a breaking provider-contract change, a plugin-architecture change, a new service
       category, or another item in `rfcs/README.md#when-an-rfc-is-required`, I opened an RFC
       instead of (or before) a PR.
+- [ ] Every commit I created follows Conventional Commits and references a GitHub issue (e.g.
+      `Refs: #123`) - see `CONTRIBUTING.md#commit-messages`. I did not use `SKIP_ISSUE_CHECK=1` to
+      get past this on my own judgment; if no fitting issue exists, I flagged that to the user/a
+      maintainer rather than fabricating a reference.
 
 ## PR summary format
 
