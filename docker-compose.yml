@@ -1,0 +1,19 @@
+# Canonical compose file for `docker compose up` (§22, §48). Kept at the repo root because that's
+# where `docker compose` looks by default - see deploy/compose/README.md for why it isn't nested
+# under deploy/compose/ despite that directory existing in the monorepo layout.
+services:
+  runtime:
+    build:
+      context: .
+      dockerfile: deploy/docker/Dockerfile
+    image: africa-local-runtime:0.1.0
+    ports:
+      - "${AFRICA_LOCAL_PORT:-9000}:9000"
+    environment:
+      PORT: "9000"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:9000/_control/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 5s

@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://africa-local.dev/schemas/event-envelope.schema.json",
+  "title": "Event Envelope",
+  "description": "Canonical envelope wrapping every callback and internal event emitted by the runtime, independent of provider-specific payload shape.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["eventId", "type", "occurredAt", "providerId", "correlationId", "attempt", "data"],
+  "properties": {
+    "eventId": {
+      "type": "string",
+      "description": "Unique id for this event. Stable across redelivery attempts of the same logical event (duplicateCallback re-sends the same eventId)."
+    },
+    "type": {
+      "type": "string",
+      "description": "Event type.",
+      "enum": ["payment.callback", "payment.status_changed"]
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 timestamp when the underlying state change occurred."
+    },
+    "providerId": {
+      "type": "string",
+      "description": "Provider id this event belongs to, e.g. tz-mpesa."
+    },
+    "correlationId": {
+      "type": "string",
+      "description": "Id of the canonical payment/transaction this event relates to."
+    },
+    "requestId": {
+      "type": "string",
+      "description": "Id of the originating request, if this event was triggered by one."
+    },
+    "attempt": {
+      "type": "integer",
+      "description": "1-based delivery attempt number for this eventId.",
+      "minimum": 1
+    },
+    "signature": {
+      "type": "string",
+      "description": "HMAC signature of the payload, present on delivered callbacks. See SECURITY.md for signature verification guidance."
+    },
+    "data": {
+      "type": "object",
+      "description": "Canonical event body. Provider plugins map this into their provider-specific callback payload shape.",
+      "additionalProperties": true,
+      "required": ["status"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "CREATED",
+            "PENDING",
+            "SUCCESS",
+            "FAILED",
+            "CANCELLED",
+            "EXPIRED",
+            "REVERSAL_PENDING",
+            "REVERSED",
+            "REFUND_PENDING",
+            "REFUNDED"
+          ]
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

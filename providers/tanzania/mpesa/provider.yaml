@@ -1,0 +1,40 @@
+id: tz-mpesa
+name: M-Pesa Tanzania
+country: TZ
+category: mobile-money
+version: 0.1.0
+status: experimental
+description: >
+  Local emulator for Vodacom M-Pesa Tanzania's customer-initiated payment (STK-push-style) flow.
+  Not affiliated with or endorsed by Vodacom/M-Pesa. No real money movement, no real credentials.
+
+capabilities:
+  paymentInitiation: true
+  statusQuery: true
+  callbacks: true
+  reversal: false
+  refund: false
+
+runtime:
+  protocol: http
+
+endpoints:
+  basePath: /tz/mpesa
+
+scenarios:
+  - success
+  - insufficient-funds
+  - timeout
+  - user-cancelled
+  - delayed-success
+  - duplicate-callback
+  - missing-callback
+  - provider-unavailable
+
+maintainers:
+  - "@africa-local/core-maintainers"
+
+approximations:
+  - "Response field names (transactionId/status/responseCode/responseMessage) are an Africa Local convention, not necessarily M-Pesa's real wire format, since no official public schema was available at authoring time."
+  - "Response/error codes in mappings/*.yaml are illustrative placeholders, not verified against real Vodacom M-Pesa responses. Corrections are welcome via PR."
+  - "Reversal/refund are declared unsupported in v0.1; the canonical state machine models them, but this provider does not expose endpoints for them yet."

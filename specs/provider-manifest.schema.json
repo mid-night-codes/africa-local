@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://africa-local.dev/schemas/provider-manifest.schema.json",
+  "title": "Provider Manifest",
+  "description": "Machine-readable description of an Africa Local provider plugin. Every directory under providers/**/ (except _template) must contain a provider.yaml that validates against this schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "name", "country", "category", "version", "status", "capabilities", "runtime", "endpoints", "scenarios"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Globally unique provider id, conventionally <country-code>-<provider-slug>.",
+      "pattern": "^[a-z]{2}-[a-z0-9-]+$",
+      "examples": ["tz-mpesa", "tz-airtel-money"]
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable provider name.",
+      "minLength": 1
+    },
+    "country": {
+      "type": "string",
+      "description": "ISO 3166-1 alpha-2 country code.",
+      "pattern": "^[A-Z]{2}$"
+    },
+    "category": {
+      "type": "string",
+      "description": "The service category this provider emulates. Africa Local starts with mobile-money; other categories are reserved for future services.",
+      "enum": ["mobile-money", "sms", "ussd", "identity", "banking"]
+    },
+    "version": {
+      "type": "string",
+      "description": "Semantic version of this provider plugin, independent of the Africa Local runtime version.",
+      "pattern": "^\\d+\\.\\d+\\.\\d+(-[0-9A-Za-z.-]+)?$"
+    },
+    "status": {
+      "type": "string",
+      "description": "Maturity of the provider. See specs/service-contract.md for the meaning of each value.",
+      "enum": ["planned", "experimental", "beta", "stable", "deprecated"]
+    },
+    "description": {
+      "type": "string",
+      "description": "Short summary of the provider and any notable approximations vs. the real service."
+    },
+    "capabilities": {
+      "$ref": "capability.schema.json"
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["protocol"],
+      "properties": {
+        "protocol": {
+          "type": "string",
+          "enum": ["http"],
+          "description": "Transport protocol the provider exposes. Only http is supported in v0.1."
+        }
+      }
+    },
+    "endpoints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["basePath"],
+      "properties": {
+        "basePath": {
+          "type": "string",
+          "description": "Path prefix this provider is mounted under on the single Africa Local runtime (see ARCHITECTURE.md - one runtime, path-routed).",
+          "pattern": "^/[a-z0-9/-]+$",
+          "examples": ["/tz/mpesa"]
+        }
+      }
+    },
+    "scenarios": {
+      "type": "array",
+      "description": "Scenario names this provider declares support for. Each name must correspond to a scenarios/<name>.yaml file.",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "maintainers": {
+      "type": "array",
+      "description": "Optional list of maintainer handles or emails for this specific provider directory.",
+      "items": { "type": "string" }
+    },
+    "approximations": {
+      "type": "array",
+      "description": "Explicit, honest list of ways this emulator differs from the real provider (favor transparent approximation over false fidelity, per ARCHITECTURE.md).",
+      "items": { "type": "string" }
+    }
+  }
+}

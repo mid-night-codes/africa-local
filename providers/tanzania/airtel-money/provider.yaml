@@ -1,0 +1,41 @@
+id: tz-airtel-money
+name: Airtel Money Tanzania
+country: TZ
+category: mobile-money
+version: 0.1.0
+status: experimental
+description: >
+  Local emulator for Airtel Money Tanzania's customer-initiated payment flow. Not affiliated with
+  or endorsed by Airtel. No real money movement, no real credentials.
+
+capabilities:
+  paymentInitiation: true
+  statusQuery: true
+  callbacks: true
+  reversal: false
+  refund: false
+
+runtime:
+  protocol: http
+
+endpoints:
+  basePath: /tz/airtel-money
+
+scenarios:
+  - success
+  - insufficient-funds
+  - timeout
+  - user-cancelled
+  - delayed-success
+  - duplicate-callback
+  - missing-callback
+  - provider-unavailable
+
+maintainers:
+  - "@africa-local/core-maintainers"
+
+approximations:
+  - "This provider intentionally reuses tz-mpesa's request/response field shape (transactionId/status/responseCode/responseMessage) rather than a distinct Airtel-specific wire format, since no official public schema was available at authoring time - only the mapped response codes/messages differ. See specs/service-contract.md#provider-mapping-layer."
+  - "Response/error codes in mappings/*.yaml are illustrative placeholders, not verified against a real Airtel Money integration guide. Corrections are welcome via PR."
+  - "Reversal/refund are declared unsupported in v0.1; the canonical state machine models them, but this provider does not expose endpoints for them yet."
+  - "Reuses the same deterministic phone-number-to-scenario convention as tz-mpesa (specs/service-contract.md) so the same test numbers behave analogously across providers."

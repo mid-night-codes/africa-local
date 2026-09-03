@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Canonical payment state machine, consumed by core/events/payment-state-machine.js at runtime and rendered into payment-lifecycle.md for humans. This file is the single source of truth for allowed transitions - do not hardcode transitions elsewhere.",
+  "states": [
+    "CREATED",
+    "PENDING",
+    "SUCCESS",
+    "FAILED",
+    "CANCELLED",
+    "EXPIRED",
+    "REVERSAL_PENDING",
+    "REVERSED",
+    "REFUND_PENDING",
+    "REFUNDED"
+  ],
+  "terminal": ["SUCCESS", "FAILED", "CANCELLED", "EXPIRED", "REVERSED", "REFUNDED"],
+  "initial": "CREATED",
+  "transitions": [
+    { "from": "CREATED", "to": "PENDING", "trigger": "provider accepted request" },
+    { "from": "CREATED", "to": "FAILED", "trigger": "provider rejected request synchronously" },
+    { "from": "PENDING", "to": "SUCCESS", "trigger": "scenario resolves successfully" },
+    { "from": "PENDING", "to": "FAILED", "trigger": "scenario resolves to a failure reason" },
+    { "from": "PENDING", "to": "CANCELLED", "trigger": "user cancelled" },
+    { "from": "PENDING", "to": "EXPIRED", "trigger": "scenario timeout elapsed with no resolution" },
+    { "from": "SUCCESS", "to": "REVERSAL_PENDING", "trigger": "reversal requested" },
+    { "from": "REVERSAL_PENDING", "to": "REVERSED", "trigger": "reversal completed" },
+    { "from": "SUCCESS", "to": "REFUND_PENDING", "trigger": "refund requested" },
+    { "from": "REFUND_PENDING", "to": "REFUNDED", "trigger": "refund completed" }
+  ],
+  "notes": {
+    "retryBehavior": "The runtime never transitions a payment on its own after a terminal state is reached. Retries apply only to callback delivery, not to the payment's canonical status.",
+    "idempotency": "Re-delivering a callback (duplicateCallback) re-sends the same eventId and does not re-run a transition; the payment's status is set once when the scenario resolves.",
+    "providerLeakage": "Provider-specific status values (e.g. an M-Pesa response code) must never appear as a canonical status. They are mapped in both directions by each provider's mappings/statuses.yaml."
+  }
+}

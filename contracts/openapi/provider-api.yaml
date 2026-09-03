@@ -1,0 +1,78 @@
+openapi: 3.0.3
+info:
+  title: Africa Local Provider API (mobile-money template)
+  version: 0.1.0
+  description: >
+    Generic shape every mobile-money provider exposes under its manifest-declared basePath
+    (§19). This is a template contract - each provider's real request/response fields are the
+    authoritative ones in providers/<country>/<provider>/schemas/*.json; this document exists so
+    the shape is visible without reading provider source, and so `make check-contracts` has
+    something to validate.
+servers:
+  - url: http://localhost:9000
+paths:
+  /{basePath}/payments:
+    post:
+      summary: Initiate a payment
+      operationId: initiatePayment
+      parameters:
+        - name: basePath
+          in: path
+          required: true
+          schema: { type: string }
+          description: e.g. tz/mpesa (the manifest's endpoints.basePath without its leading slash)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [phone, amount]
+              properties:
+                phone: { type: string, description: "MSISDN, see specs/service-contract.md" }
+                amount: { type: number }
+                reference: { type: string }
+                callbackUrl: { type: string, format: uri }
+      responses:
+        "202":
+          description: Accepted for asynchronous processing (typical case)
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/PaymentResponse" }
+        "400":
+          description: Request failed schema validation
+        "503":
+          description: Provider unavailable scenario
+  /{basePath}/payments/{id}:
+    get:
+      summary: Query payment status
+      operationId: getPaymentStatus
+      parameters:
+        - name: basePath
+          in: path
+          required: true
+          schema: { type: string }
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/PaymentResponse" }
+        "404":
+          description: Unknown payment id
+components:
+  schemas:
+    PaymentResponse:
+      type: object
+      required: [transactionId, status]
+      properties:
+        transactionId: { type: string }
+        status:
+          type: string
+          enum: [CREATED, PENDING, SUCCESS, FAILED, CANCELLED, EXPIRED, REVERSAL_PENDING, REVERSED, REFUND_PENDING, REFUNDED]
+        responseCode: { type: string }
+        responseMessage: { type: string }

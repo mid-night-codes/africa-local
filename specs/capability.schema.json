@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://africa-local.dev/schemas/capability.schema.json",
+  "title": "Capability Map",
+  "description": "Declares which canonical capabilities a provider implements. Unknown capability keys are rejected so the registry stays a reliable source of truth for the runtime, CLI and future desktop UI.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "paymentInitiation": {
+      "type": "boolean",
+      "description": "Provider can accept a new payment request."
+    },
+    "statusQuery": {
+      "type": "boolean",
+      "description": "Provider supports querying the status of a previously created payment."
+    },
+    "callbacks": {
+      "type": "boolean",
+      "description": "Provider will deliver asynchronous callback(s) to a caller-supplied URL."
+    },
+    "reversal": {
+      "type": "boolean",
+      "description": "Provider models reversal of a completed payment. Optional for v0.1 (state modeled, endpoint optional)."
+    },
+    "refund": {
+      "type": "boolean",
+      "description": "Provider models refunding a completed payment. Optional for v0.1 (state modeled, endpoint optional)."
+    }
+  },
+  "required": ["paymentInitiation", "statusQuery", "callbacks"]
+}

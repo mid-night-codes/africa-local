@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Template Provider - Payment Status Response",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["transactionId", "status", "responseCode", "responseMessage"],
+  "properties": {
+    "transactionId": { "type": "string" },
+    "status": {
+      "type": "string",
+      "enum": ["CREATED", "PENDING", "SUCCESS", "FAILED", "CANCELLED", "EXPIRED", "REVERSAL_PENDING", "REVERSED", "REFUND_PENDING", "REFUNDED"]
+    },
+    "responseCode": { "type": "string" },
+    "responseMessage": { "type": "string" }
+  }
+}

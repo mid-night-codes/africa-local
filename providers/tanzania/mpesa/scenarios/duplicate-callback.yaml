@@ -1,0 +1,14 @@
+name: duplicate-callback
+description: >
+  Payment succeeds, but the provider (mis)delivers the same callback event twice, exercising a
+  consumer's idempotency handling (same eventId on both deliveries).
+
+match:
+  phone: "255700000006"
+
+behavior:
+  initialStatus: PENDING
+  finalStatus: SUCCESS
+  callbackDelay: 1s
+  callbackCount: 2
+  duplicateCallback: true

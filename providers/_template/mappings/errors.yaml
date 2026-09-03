@@ -1,0 +1,15 @@
+# Maps a scenario's canonical `reason` code to your provider's error response fields. These
+# override the generic status mapping in statuses.yaml when a scenario sets `behavior.reason`.
+# Add one entry per reason code your scenarios/*.yaml files reference.
+INSUFFICIENT_FUNDS:
+  responseCode: "TODO"
+  responseMessage: "TODO"
+USER_CANCELLED:
+  responseCode: "TODO"
+  responseMessage: "TODO"
+TIMEOUT:
+  responseCode: "TODO"
+  responseMessage: "TODO"
+PROVIDER_UNAVAILABLE:
+  responseCode: "TODO"
+  responseMessage: "TODO"

@@ -1,0 +1,16 @@
+# Maps a scenario's canonical `reason` code to this provider's error response fields. These
+# override the generic status mapping in statuses.yaml for FAILED/CANCELLED/EXPIRED results.
+# Codes below are illustrative placeholders (see provider.yaml#approximations), not verified
+# against a real Vodacom M-Pesa integration guide.
+INSUFFICIENT_FUNDS:
+  responseCode: "51"
+  responseMessage: "Insufficient balance in the customer's account"
+USER_CANCELLED:
+  responseCode: "17"
+  responseMessage: "Request cancelled by user on their device"
+TIMEOUT:
+  responseCode: "26"
+  responseMessage: "Customer did not respond in time"
+PROVIDER_UNAVAILABLE:
+  responseCode: "99"
+  responseMessage: "M-Pesa service temporarily unavailable"

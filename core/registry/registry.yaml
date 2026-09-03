@@ -1,0 +1,30 @@
+# Africa Local provider registry (§9). Machine-readable source of truth for which providers
+# exist and how mature they are. The CLI, the (future) desktop UI, and CI's
+# scripts/validate-registry.js all read this file - do not duplicate this list anywhere else.
+#
+# status values: planned | experimental | beta | stable | deprecated
+
+providers:
+  - id: tz-mpesa
+    country: TZ
+    category: mobile-money
+    status: experimental
+    path: providers/tanzania/mpesa
+
+  - id: tz-airtel-money
+    country: TZ
+    category: mobile-money
+    status: experimental
+    path: providers/tanzania/airtel-money
+
+  - id: ke-mpesa
+    country: KE
+    category: mobile-money
+    status: planned
+    path: null
+
+  - id: ug-mtn-momo
+    country: UG
+    category: mobile-money
+    status: planned
+    path: null

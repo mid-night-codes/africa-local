@@ -1,0 +1,33 @@
+{
+  "name": "africa-local",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local-first emulator platform for African digital services",
+  "license": "Apache-2.0",
+  "type": "module",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "bin": {
+    "africa-local": "./cli/bin/africa-local.js"
+  },
+  "scripts": {
+    "setup": "npm install",
+    "start": "node runtime/index.js",
+    "validate:schemas": "node scripts/validate-schemas.js",
+    "validate:providers": "node scripts/validate-providers.js",
+    "validate:registry": "node scripts/validate-registry.js",
+    "validate": "npm run validate:schemas && npm run validate:providers && npm run validate:registry",
+    "check-contracts": "node scripts/validate-contracts.js",
+    "lint": "node scripts/lint-repo.js",
+    "test": "bash -c 'shopt -s globstar nullglob; node --test core/**/*.test.js runtime/**/*.test.js cli/**/*.test.js'",
+    "test:conformance": "bash -c 'shopt -s globstar nullglob; node --test conformance/**/*.test.js'"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "commander": "^12.1.0",
+    "express": "^4.21.2",
+    "js-yaml": "^4.1.0"
+  }
+}

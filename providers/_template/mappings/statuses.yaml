@@ -1,0 +1,34 @@
+# Maps every canonical payment status (specs/state-machines/payment-lifecycle.json) to your
+# provider's response shape. Every one of the 10 canonical statuses must have an entry, even the
+# ones you don't expect scenarios to hit yet (REVERSAL_PENDING, REVERSED, REFUND_PENDING,
+# REFUNDED) - the conformance suite checks for completeness.
+CREATED:
+  responseCode: "TODO"
+  responseMessage: "TODO"
+PENDING:
+  responseCode: "TODO"
+  responseMessage: "TODO"
+SUCCESS:
+  responseCode: "TODO"
+  responseMessage: "TODO"
+FAILED:
+  responseCode: "TODO"
+  responseMessage: "TODO"
+CANCELLED:
+  responseCode: "TODO"
+  responseMessage: "TODO"
+EXPIRED:
+  responseCode: "TODO"
+  responseMessage: "TODO"
+REVERSAL_PENDING:
+  responseCode: "TODO"
+  responseMessage: "TODO"
+REVERSED:
+  responseCode: "TODO"
+  responseMessage: "TODO"
+REFUND_PENDING:
+  responseCode: "TODO"
+  responseMessage: "TODO"
+REFUNDED:
+  responseCode: "TODO"
+  responseMessage: "TODO"

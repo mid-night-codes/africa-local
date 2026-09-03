@@ -1,0 +1,38 @@
+name: Docker build & smoke test
+
+# Heavier than ci.yml on purpose - kept separate so PR feedback (ci.yml) stays fast (§40).
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-and-smoke-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build -f deploy/docker/Dockerfile -t africa-local-runtime:ci .
+      - name: Run container
+        run: docker run -d --name africa-local-ci -p 9000:9000 africa-local-runtime:ci
+      - name: Wait for health check
+        run: |
+          for i in $(seq 1 20); do
+            if curl -sf http://localhost:9000/_control/health; then exit 0; fi
+            sleep 1
+          done
+          echo "runtime never became healthy"; docker logs africa-local-ci; exit 1
+      - name: Golden path smoke test
+        run: |
+          set -e
+          RESP=$(curl -sf -X POST http://localhost:9000/tz/mpesa/payments \
+            -H "Content-Type: application/json" \
+            -d '{"phone":"255700000001","amount":50000}')
+          echo "$RESP"
+          echo "$RESP" | grep -q '"status":"PENDING"'
+      - name: Container logs (always, for debugging)
+        if: always()
+        run: docker logs africa-local-ci || true
+      - name: Stop container
+        if: always()
+        run: docker rm -f africa-local-ci || true

@@ -1,0 +1,46 @@
+# Copy this whole providers/_template/ directory to providers/<country>/<provider-slug>/ and fill
+# in every field below. Validate against specs/provider-manifest.schema.json - see
+# providers/_template/CONTRIBUTING.md for the full checklist.
+
+id: xx-provider-slug          # <country-code>-<slug>, e.g. tz-mpesa. Must be globally unique.
+name: Human Readable Provider Name
+country: XX                   # ISO 3166-1 alpha-2, e.g. TZ
+category: mobile-money        # one of: mobile-money | sms | ussd | identity | banking
+version: 0.1.0
+status: planned                # planned while you build it, experimental once conformance passes
+
+description: >
+  One or two sentences describing what real-world service this emulates, and any well-known
+  behavior it deliberately does not attempt to reproduce.
+
+capabilities:
+  paymentInitiation: true       # set only the capabilities you actually implement
+  statusQuery: true
+  callbacks: true
+  reversal: false
+  refund: false
+
+runtime:
+  protocol: http
+
+endpoints:
+  basePath: /xx/provider-slug   # must be unique across the whole registry
+
+scenarios:
+  # List every scenario name you ship a scenarios/<name>.yaml for. At minimum, provide the
+  # built-in set from specs/service-contract.md#conformance-requirements:
+  - success
+  - insufficient-funds
+  - timeout
+  - user-cancelled
+  - provider-unavailable
+  - delayed-success
+  - duplicate-callback
+  - missing-callback
+
+maintainers:
+  - "@your-github-handle"
+
+approximations:
+  # Be explicit and honest (§53 - transparent approximation beats false fidelity). Examples:
+  - "Response codes are illustrative placeholders, not verified against a real integration guide."

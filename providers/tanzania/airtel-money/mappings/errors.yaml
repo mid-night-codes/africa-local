@@ -1,0 +1,15 @@
+# Maps a scenario's canonical `reason` code to this provider's error response fields. Codes are
+# illustrative placeholders (see provider.yaml#approximations), not verified against a real Airtel
+# Money integration guide.
+INSUFFICIENT_FUNDS:
+  responseCode: "2001"
+  responseMessage: "Subscriber has insufficient funds"
+USER_CANCELLED:
+  responseCode: "2100"
+  responseMessage: "Transaction cancelled by subscriber"
+TIMEOUT:
+  responseCode: "2200"
+  responseMessage: "Subscriber did not respond in time"
+PROVIDER_UNAVAILABLE:
+  responseCode: "5000"
+  responseMessage: "Airtel Money service temporarily unavailable"

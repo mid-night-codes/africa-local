@@ -1,0 +1,11 @@
+name: user-cancelled
+description: Customer cancels the payment prompt on their device.
+
+match:
+  phone: "255700000003"
+
+behavior:
+  initialStatus: PENDING
+  finalStatus: CANCELLED
+  reason: USER_CANCELLED
+  callbackDelay: 2s

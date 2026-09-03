@@ -1,0 +1,13 @@
+name: delayed-success
+description: >
+  Payment eventually succeeds, but only after a realistic delay - useful for testing that a
+  client correctly waits for the callback (or polls status) instead of assuming an immediate
+  result. The 30s delay is scaled by AFRICA_LOCAL_TIME_SCALE in CI/tests, see runtime/README.md.
+
+match:
+  phone: "255700000005"
+
+behavior:
+  initialStatus: PENDING
+  finalStatus: SUCCESS
+  callbackDelay: 30s

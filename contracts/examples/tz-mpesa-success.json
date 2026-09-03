@@ -1,0 +1,15 @@
+{
+  "description": "Example request/response pair for the golden path scenario. Run for real: examples/curl/README.md",
+  "request": {
+    "method": "POST",
+    "path": "/tz/mpesa/payments",
+    "body": { "phone": "255700000001", "amount": 50000 }
+  },
+  "syncResponse": {
+    "httpStatus": 202,
+    "body": { "transactionId": "<generated>", "status": "PENDING", "responseCode": "0", "responseMessage": "Request accepted for processing" }
+  },
+  "eventualCallback": {
+    "body": { "transactionId": "<generated>", "status": "SUCCESS", "responseCode": "0", "responseMessage": "Success. Transaction completed." }
+  }
+}

@@ -1,0 +1,34 @@
+# Maps every canonical payment status (specs/state-machines/payment-lifecycle.json) to this
+# provider's response shape. A scenario's `reason` (see mappings/errors.yaml) always overrides the
+# generic FAILED mapping below when present. Codes deliberately differ from tz-mpesa's to prove
+# the mapping layer - not the runtime - is what makes providers distinct (§53).
+CREATED:
+  responseCode: "1000"
+  responseMessage: "Transaction received"
+PENDING:
+  responseCode: "1001"
+  responseMessage: "Transaction is being processed"
+SUCCESS:
+  responseCode: "1000"
+  responseMessage: "Transaction successful"
+FAILED:
+  responseCode: "2000"
+  responseMessage: "Transaction failed"
+CANCELLED:
+  responseCode: "2100"
+  responseMessage: "Transaction cancelled by subscriber"
+EXPIRED:
+  responseCode: "2200"
+  responseMessage: "Transaction expired"
+REVERSAL_PENDING:
+  responseCode: "1002"
+  responseMessage: "Reversal in progress"
+REVERSED:
+  responseCode: "1000"
+  responseMessage: "Transaction reversed"
+REFUND_PENDING:
+  responseCode: "1003"
+  responseMessage: "Refund in progress"
+REFUNDED:
+  responseCode: "1000"
+  responseMessage: "Transaction refunded"

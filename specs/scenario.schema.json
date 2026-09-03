@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://africa-local.dev/schemas/scenario.schema.json",
+  "title": "Scenario",
+  "description": "Neutral, provider-independent description of how the emulator should behave for requests that match it. Kept intentionally minimal for v0.1 but extensible - see ARCHITECTURE.md#scenario-engine.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["name", "match", "behavior"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Scenario identifier, must match the filename (scenarios/<name>.yaml) and be listed in the provider manifest.",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "description": {
+      "type": "string"
+    },
+    "match": {
+      "type": "object",
+      "description": "Conditions used by the scenario engine to select this scenario for an incoming canonical request. All present fields must match.",
+      "additionalProperties": false,
+      "properties": {
+        "phone": {
+          "type": "string",
+          "description": "Exact MSISDN this scenario triggers on (deterministic test identity, see specs/service-contract.md)."
+        },
+        "phonePattern": {
+          "type": "string",
+          "description": "Regular expression alternative to an exact phone match."
+        },
+        "amountAbove": {
+          "type": "number",
+          "description": "Matches when the request amount is strictly greater than this value."
+        },
+        "amountBelow": {
+          "type": "number",
+          "description": "Matches when the request amount is strictly less than this value."
+        }
+      },
+      "minProperties": 1
+    },
+    "behavior": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["initialStatus", "finalStatus"],
+      "properties": {
+        "initialStatus": {
+          "$ref": "#/$defs/canonicalStatus",
+          "description": "Status returned synchronously on payment creation."
+        },
+        "finalStatus": {
+          "$ref": "#/$defs/canonicalStatus",
+          "description": "Status the payment settles into (reported via status query and/or callback)."
+        },
+        "reason": {
+          "type": "string",
+          "description": "Canonical failure/terminal reason code, mapped to a provider-specific error via mappings/errors.yaml.",
+          "examples": ["INSUFFICIENT_FUNDS", "USER_CANCELLED", "TIMEOUT", "PROVIDER_UNAVAILABLE"]
+        },
+        "httpStatus": {
+          "type": "integer",
+          "description": "Override the HTTP status code of the synchronous response.",
+          "minimum": 100,
+          "maximum": 599
+        },
+        "latencyMs": {
+          "type": "integer",
+          "description": "Artificial latency before the synchronous response is returned.",
+          "minimum": 0
+        },
+        "callbackDelay": {
+          "type": "string",
+          "description": "Delay before the callback is delivered, as a duration string (e.g. '30s', '2m'). Omit for immediate delivery.",
+          "pattern": "^[0-9]+(ms|s|m)$"
+        },
+        "callbackCount": {
+          "type": "integer",
+          "description": "Number of times to deliver the callback. Defaults to 1.",
+          "minimum": 0
+        },
+        "dropCallback": {
+          "type": "boolean",
+          "description": "If true, the callback is scheduled but never actually delivered (simulates a missing callback)."
+        },
+        "duplicateCallback": {
+          "type": "boolean",
+          "description": "If true, the same callback event is delivered twice with the same event id, to exercise idempotency handling."
+        },
+        "invalidSignature": {
+          "type": "boolean",
+          "description": "If true, the callback is delivered with a deliberately invalid signature header."
+        },
+        "outOfOrderDelivery": {
+          "type": "boolean",
+          "description": "If true and callbackCount > 1, later-state callbacks are delivered before earlier-state ones."
+        },
+        "providerError": {
+          "type": "object",
+          "description": "Free-form provider-specific error payload override, used verbatim by the mapping layer when set.",
+          "additionalProperties": true
+        },
+        "responsePayloadOverride": {
+          "type": "object",
+          "description": "Free-form fields merged into the synchronous provider response.",
+          "additionalProperties": true
+        },
+        "callbackPayloadOverride": {
+          "type": "object",
+          "description": "Free-form fields merged into the callback payload.",
+          "additionalProperties": true
+        }
+      }
+    }
+  },
+  "$defs": {
+    "canonicalStatus": {
+      "type": "string",
+      "enum": [
+        "CREATED",
+        "PENDING",
+        "SUCCESS",
+        "FAILED",
+        "CANCELLED",
+        "EXPIRED",
+        "REVERSAL_PENDING",
+        "REVERSED",
+        "REFUND_PENDING",
+        "REFUNDED"
+      ]
+    }
+  }
+}

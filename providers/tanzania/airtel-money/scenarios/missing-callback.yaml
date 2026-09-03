@@ -1,0 +1,14 @@
+name: missing-callback
+description: >
+  Payment succeeds internally (visible via GET /payments/{id}) but the callback is never actually
+  delivered, simulating a dropped webhook. Not part of the default deterministic phone list -
+  trigger it explicitly via POST /_control/providers/tz-airtel-money/scenario.
+
+match:
+  phone: "255700000008"
+
+behavior:
+  initialStatus: PENDING
+  finalStatus: SUCCESS
+  callbackDelay: 1s
+  dropCallback: true

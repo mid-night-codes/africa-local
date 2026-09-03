@@ -1,0 +1,9 @@
+# See GOVERNANCE.md for what these roles mean. Sensitive, cross-cutting directories require
+# Core Maintainer review; individual provider directories do not, once the pattern is established.
+/specs/                    @africa-local/core-maintainers
+/contracts/                @africa-local/core-maintainers
+/runtime/                  @africa-local/core-maintainers
+/.github/                  @africa-local/core-maintainers
+/adr/                      @africa-local/core-maintainers
+/rfcs/                     @africa-local/core-maintainers
+/providers/_template/      @africa-local/core-maintainers

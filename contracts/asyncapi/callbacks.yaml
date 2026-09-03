@@ -1,0 +1,33 @@
+asyncapi: 2.6.0
+info:
+  title: Africa Local Provider Callbacks
+  version: 0.1.0
+  description: >
+    DRAFT / not yet validated in CI beyond YAML-parses-and-has-an-asyncapi-field
+    (scripts/validate-contracts.js). Documents the shape of the HTTP callback the runtime POSTs to
+    a caller-supplied callbackUrl. See core/callbacks/README.md for the actual delivery mechanics
+    (headers, signature, retry/duplicate/drop semantics) and specs/event-envelope.schema.json for
+    the canonical envelope this is derived from.
+channels:
+  payment.callback:
+    description: >
+      Not a real message broker channel - represents an outbound HTTP POST to the
+      developer-supplied callbackUrl, with the payload below and the headers documented in
+      core/callbacks/README.md (x-africa-local-signature, x-africa-local-event-id,
+      x-africa-local-attempt).
+    publish:
+      message:
+        $ref: "#/components/messages/PaymentCallback"
+components:
+  messages:
+    PaymentCallback:
+      payload:
+        type: object
+        required: [transactionId, status, responseCode, responseMessage]
+        properties:
+          transactionId: { type: string }
+          status:
+            type: string
+            enum: [SUCCESS, FAILED, CANCELLED, EXPIRED]
+          responseCode: { type: string }
+          responseMessage: { type: string }

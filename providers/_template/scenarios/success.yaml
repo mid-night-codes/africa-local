@@ -1,0 +1,10 @@
+name: success
+description: Golden path - payment is accepted and settles successfully.
+
+match:
+  phone: "255700000001"
+
+behavior:
+  initialStatus: PENDING
+  finalStatus: SUCCESS
+  callbackDelay: 1s

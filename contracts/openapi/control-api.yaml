@@ -1,0 +1,146 @@
+openapi: 3.0.3
+info:
+  title: Africa Local Control API
+  version: 0.1.0
+  description: >
+    Runtime control surface used by the CLI, tests, CI, and the future desktop UI (§18).
+    Kept strictly separate from provider endpoints, defined per-provider under
+    contracts/openapi/provider-api.yaml.
+servers:
+  - url: http://localhost:9000/_control
+paths:
+  /health:
+    get:
+      summary: Runtime health and loaded providers
+      operationId: getHealth
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status, uptimeMs, providerCount, providers]
+                properties:
+                  status: { type: string, enum: [ok] }
+                  uptimeMs: { type: integer }
+                  providerCount: { type: integer }
+                  providers: { type: array, items: { type: string } }
+  /providers:
+    get:
+      summary: List every loaded provider
+      operationId: listProviders
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/ProviderSummary" }
+  /providers/{id}:
+    get:
+      summary: Get one provider's full manifest and active forced scenario
+      operationId: getProvider
+      parameters:
+        - $ref: "#/components/parameters/ProviderId"
+      responses:
+        "200": { description: OK }
+        "404": { $ref: "#/components/responses/NotFound" }
+  /providers/{id}/scenario:
+    post:
+      summary: Force a provider's next request(s) into a specific scenario
+      operationId: setProviderScenario
+      parameters:
+        - $ref: "#/components/parameters/ProviderId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                scenario:
+                  type: [string, "null"]
+                  description: Scenario name, or null to clear the override and fall back to phone matching.
+      responses:
+        "200": { description: OK }
+        "400": { description: Unknown scenario name }
+        "404": { $ref: "#/components/responses/NotFound" }
+  /scenarios:
+    get:
+      summary: List scenarios, optionally filtered to one provider
+      operationId: listScenarios
+      parameters:
+        - name: provider
+          in: query
+          required: false
+          schema: { type: string }
+      responses:
+        "200": { description: OK }
+  /requests:
+    get:
+      summary: Recent request history (§17)
+      operationId: listRequests
+      responses:
+        "200": { description: OK }
+  /requests/{id}:
+    get:
+      summary: One request history entry
+      operationId: getRequest
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200": { description: OK }
+        "404": { $ref: "#/components/responses/NotFound" }
+  /callbacks:
+    get:
+      summary: Recent callback delivery attempts (§16)
+      operationId: listCallbacks
+      responses:
+        "200": { description: OK }
+  /callbacks/{eventId}/replay:
+    post:
+      summary: Re-deliver a previously recorded callback payload verbatim
+      operationId: replayCallback
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200": { description: OK }
+        "404": { $ref: "#/components/responses/NotFound" }
+components:
+  parameters:
+    ProviderId:
+      name: id
+      in: path
+      required: true
+      schema: { type: string }
+  responses:
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error: { type: string }
+  schemas:
+    ProviderSummary:
+      type: object
+      required: [id, name, country, category, status, version, basePath, capabilities, scenarios]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        country: { type: string }
+        category: { type: string }
+        status: { type: string }
+        version: { type: string }
+        basePath: { type: string }
+        capabilities: { type: object }
+        scenarios: { type: array, items: { type: string } }
