@@ -36,7 +36,10 @@ Inspect diff (git diff)
 Update documentation
       |
       v
-Prepare PR summary
+Create a branch, commit, push
+      |
+      v
+Open a PR with a closing keyword (Closes/Fixes/Resolves #N) - never push straight to main
 ```
 
 ## Self-review checklist
@@ -67,12 +70,17 @@ Before proposing a PR, confirm all of the following:
       `Refs: #123`) - see `CONTRIBUTING.md#commit-messages`. I did not use `SKIP_ISSUE_CHECK=1` to
       get past this on my own judgment; if no fitting issue exists, I flagged that to the user/a
       maintainer rather than fabricating a reference.
+- [ ] I opened a PR rather than pushing directly to `main`, and its description contains a closing
+      keyword (`Closes #N` / `Fixes #N` / `Resolves #N`) for the tracking issue - see
+      `CONTRIBUTING.md#pull-requests`.
+- [ ] I left the PR open for review/merge rather than merging it myself, unless explicitly told to
+      merge it.
 
 ## PR summary format
 
 Structure your PR description as:
 
 1. **What** changed, in one or two sentences.
-2. **Why**, linking the issue if one exists.
+2. **Why** - `Closes #N` (or `Fixes`/`Resolves`) for the tracking issue.
 3. **Approximations or assumptions**, explicitly, or "None."
 4. **Validation performed** - which of the commands above you ran and that they passed.

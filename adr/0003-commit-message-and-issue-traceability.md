@@ -75,3 +75,13 @@ only reads local commit message text and runs `git log` against the local reposi
 Adds two lightweight steps to CI (`commitlint`, `require-issue-reference.js --range`) on every PR,
 and a local git hook on every commit. Both are fast (no network I/O) and fail with actionable
 guidance rather than a bare error.
+
+## Related
+
+This ADR covers per-*commit* traceability only (`Refs: #123`, which doesn't need to close
+anything). A separate, complementary rule requires every *PR* to close its tracking issue with a
+GitHub closing keyword (`Closes #123` / `Fixes #123` / `Resolves #123`) - see
+`CONTRIBUTING.md#pull-requests`. That rule is about the review/merge workflow (PRs instead of
+direct pushes to `main`) rather than commit hygiene, so it didn't warrant its own ADR, but the two
+work together: every commit is traceable to an issue, and every issue is closed by the PR that
+actually ships the work.

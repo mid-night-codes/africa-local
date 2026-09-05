@@ -36,6 +36,9 @@ Review
 Merge
 ```
 
+**Every change lands via a pull request, never a direct push to `main`** - even a single-file docs
+fix. See [Pull requests](#pull-requests) below for what the PR itself must contain.
+
 ## Setup
 
 ```bash
@@ -98,6 +101,15 @@ for why.
 Keep PRs small and reviewable - favor several small PRs over one large one (§53). Fill in
 [`.github/pull_request_template.md`](.github/pull_request_template.md); it asks for the same
 things reviewers will check anyway.
+
+Every PR must reference its tracking issue using a
+[GitHub closing keyword](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue)
+(`Closes #123`, `Fixes #123`, or `Resolves #123`) in the PR description, so merging the PR
+automatically closes the issue. If no issue exists yet, create one first (`gh issue create` or the
+GitHub UI) - same rule as [Commit messages](#commit-messages) above, just at the PR level instead
+of the per-commit level. This is separate from (and in addition to) the per-commit `Refs: #123`
+requirement: a commit only needs *some* reference and doesn't need a PR at all to be valid on its
+own, but the PR that eventually ships that work must *close* the issue when merged.
 
 ## Definition of done
 
