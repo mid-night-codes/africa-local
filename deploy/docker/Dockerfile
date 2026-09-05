@@ -5,7 +5,11 @@ FROM node:22-alpine
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-RUN npm ci --omit=dev
+# --ignore-scripts skips the "prepare": "husky" lifecycle script, which npm always runs on
+# install regardless of --omit=dev. husky is a devDependency (not present in this --omit=dev
+# install) and this image has no .git directory for it to install hooks into anyway - see
+# adr/0003. None of our production dependencies rely on install-time scripts, so this is safe.
+RUN npm ci --omit=dev --ignore-scripts
 
 COPY core ./core
 COPY runtime ./runtime

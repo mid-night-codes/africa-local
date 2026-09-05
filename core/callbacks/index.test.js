@@ -22,6 +22,20 @@ function startSink() {
   });
 }
 
+/**
+ * Polls until `predicate()` is true, instead of a fixed sleep - a hardcoded delay flakes on a
+ * loaded CI runner (this exact test failed in CI with a 100ms sleep that was enough locally but
+ * not under GitHub Actions' shared runners).
+ */
+async function waitUntil(predicate, { timeoutMs = 5000, intervalMs = 10 } = {}) {
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    if (predicate()) return;
+    await new Promise((resolve) => setTimeout(resolve, intervalMs));
+  }
+  throw new Error(`waitUntil: condition not met within ${timeoutMs}ms`);
+}
+
 test("delivers a single immediate callback and records it", async () => {
   const { server, received, url } = await startSink();
   const attempts = [];
@@ -37,7 +51,7 @@ test("delivers a single immediate callback and records it", async () => {
     buildPayload: (event) => ({ transactionId: event.correlationId, status: event.data.status }),
   });
 
-  await new Promise((resolve) => setTimeout(resolve, 100));
+  await waitUntil(() => attempts.length >= 1);
   server.close();
 
   assert.equal(received.length, 1);
@@ -62,7 +76,7 @@ test("dropCallback records an attempt but never sends it", async () => {
     buildPayload: (event) => ({ transactionId: event.correlationId, status: event.data.status }),
   });
 
-  await new Promise((resolve) => setTimeout(resolve, 100));
+  await waitUntil(() => attempts.length >= 1);
   server.close();
 
   assert.equal(received.length, 0);
@@ -85,7 +99,7 @@ test("duplicateCallback delivers the same eventId twice", async () => {
     buildPayload: (event) => ({ transactionId: event.correlationId, status: event.data.status }),
   });
 
-  await new Promise((resolve) => setTimeout(resolve, 200));
+  await waitUntil(() => attempts.length >= 2);
   server.close();
 
   assert.equal(received.length, 2);
@@ -109,7 +123,7 @@ test("replay resends a recorded payload verbatim with an incremented attempt", a
     data: { status: "SUCCESS" },
   });
 
-  await new Promise((resolve) => setTimeout(resolve, 50));
+  await waitUntil(() => received.length >= 1);
   server.close();
 
   assert.equal(received.length, 1);
