@@ -80,6 +80,11 @@ and each provider's own `README.md` each cover only their own directory.
     and do not attempt to script around the check (e.g. `SKIP_ISSUE_CHECK=1`) to make a commit
     succeed; that flag is for a human maintainer's deliberate, visible exception, not a way to
     satisfy a check you'd rather not deal with.
+17. Every change lands via a pull request - never push directly to `main`, not even for a
+    single-file fix. The PR description must reference its tracking issue with a closing keyword
+    (`Closes #123` / `Fixes #123` / `Resolves #123`) so merging the PR closes the issue - see
+    `CONTRIBUTING.md#pull-requests`. Open the PR and leave it for review/merge; do not merge your
+    own PR unless the user or a maintainer explicitly asks you to.
 
 ## Project-specific things worth knowing
 

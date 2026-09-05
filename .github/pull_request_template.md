@@ -4,8 +4,9 @@
 
 ## Why?
 
-<!-- Link the issue this PR is for (every commit should already reference it, see
-     CONTRIBUTING.md#commit-messages - if none exists yet, open one before this PR). -->
+Closes #<!-- issue number - required, see CONTRIBUTING.md#pull-requests. Use Fixes/Resolves
+     instead of Closes if that reads more naturally; any of the three auto-closes the issue on
+     merge. If no issue exists yet, create one first (`gh issue create` or the GitHub UI). -->
 
 ## Type of change
 
@@ -28,6 +29,7 @@
 - [ ] No unrelated changes included
 - [ ] Every commit follows Conventional Commits and references a GitHub issue (checked by CI, see
       `.github/workflows/commit-messages.yml`)
+- [ ] This PR uses a closing keyword (Closes/Fixes/Resolves #N) above, not just a plain link
 
 ## Approximations or assumptions made
 
